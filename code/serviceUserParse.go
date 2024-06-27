@@ -4,6 +4,8 @@ package main
 import (
 	"fmt"
 	"strings"
+
+	"golang.org/x/text/number"
 )
 
 // Setting represents a setting with its attributes
@@ -18,6 +20,13 @@ type Setting struct {
 	IsOwner 				string // Is this the owner profile?
 }
 
+type DateParse struct {
+	Days string
+	Hours string
+	Minutes string
+	Seconds string
+	Milliseconds string
+}
 // The date timestamps are in this format:  Last logged in: +17d2h32m27s216ms ago
 // We need to break it down. 
 
@@ -40,9 +49,10 @@ func main() {
 
 	// Then we need to check that the lines we are using only has "Created:" or whatever else.
 	// Read: https://pkg.go.dev/strings#HasPrefix
-	// if strings.HasPrefix("Created:") || strings.HasPrefix("Last logged in:") then {
+	if strings.HasPrefix("Created:") || strings.HasPrefix("Last logged in:") then {
 		// The other process that is below? Maybe just put it into a func? 
-	// }
+
+	}
 	
 	// If we want to keep that variable, we need to use it. Else the code does not run.
 	fmt.Println(absoluteUnit)
@@ -65,6 +75,7 @@ if agoIndex != -1 {
 // This SHOULD give us just the timestamp, like +17d2h32m27s216ms
 fmt.Println(testString)
 
+fmt.Println()
 // Now we need to break down this string. Somehow.
 
 // Something like:
