@@ -31,7 +31,7 @@ Then, we parse the information through our software.
 1. Media. We are analysing logfiles, we do not extract any media from the device.
 2. Browser history.
 3. SMS.
-4. 
+4. If the phone has rebooted, then information on deleted profiles will be incredibly limited, along with other data possibly.
 
 ### HOW DO I IDENTIFY A GRAPHENEOS DEVICE?
 1. Go into the guest profile if it's enabled.
