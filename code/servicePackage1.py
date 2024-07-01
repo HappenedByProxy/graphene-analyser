@@ -2,6 +2,8 @@ import re
 
 # Input string
 #testString = "  Package [com.android.adservices.api] (a37eabe)"
+# vim: set fdm=marker fmr={{{,}}} fdl=0 :
+# {{{ dummy data
 testString = """
   Package [org.proninyaroslav.libretorrent] (1e0e763):
     appId=10076
@@ -2161,53 +2163,55 @@ testString = """
         android.permission.WRITE_EXTERNAL_STORAGE: granted=false
   
 """
+# }}}
 
-with open('input.txt', 'r') as file:
-    fileContent = file.read()
- 
-print(fileContent)
+packageNamePattern = r'\s*Package \[([^\]]+)\] \(\w+\):'
 
-# First, we get the package name.
-# Using regex (my sworn enemy) to find and store everything between square bracketrs as a package. Then, get the other stuff like install date and where the package was installed from. With regex. Why?
+regexes = {
+    'installTime': r'\s*timeStamp=(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})',
+    'lastUpdated': r'\s*lastUpdateTime=(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})',
+    'installerOrigin': r'\s*originatingPackageName=([^\n]+)',
+    'installerOriginOther': r'\s*installerPackageName=([^\n]+)'
+}
 
-# ChatGPT 3.5 assisted in modifying the regex to let it re-iterate through several blocks of text.
-# https://chatgpt.com/share/71617b5d-d4ec-4688-a2c7-12117cb2ad3a
-packageNamePattern = r'Package \[([^\]]+)\] \(\w+\):'
-installTimePattern = r'timeStamp=(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})'
-lastUpdatedPattern = r'lastUpdateTime=(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})'
-installerOriginPattern = r'originatingPackageName=([^\n]+)'
-installerOriginOtherPattern = r'installerPackageName=([^\n]+)'
+names = {
+    'installTime': 'Install time',
+    'lastUpdated': 'Last updated',
+    'installerOrigin': 'Installer origin',
+    'installerOriginOther': 'Installer origin (other)'
+}
 
-matches = re.findall(packageNamePattern + r'[\s\S]*?' +
-                     installTimePattern + r'[\s\S]*?' +
-                     lastUpdatedPattern + r'[\s\S]*?' +
-                     installerOriginPattern + r'[\s\S]*?' +
-                     installerOriginOtherPattern, testString)
+packages = []
 
+with open('package.txt.priv', 'r') as file:
+    fileContent = file.readlines()
+    package = {}
+    for line in fileContent:
+        match = re.match(packageNamePattern, line)
+        if not match == None:
+            if len(package) > 0: # current package has data, but we've ran into a new Package [...] line
+                packages.append(package) # so add it to the list of packages
+                package = {} # and clear the package, ready for next round
 
+            package['packageName'] = match[1]
+            continue
 
-# ChatGPT 3.5 assisted in refactoring and fixing this code. "installTime" was outputting wrong information, the AI helped fix it.
-# Chat URL unavailable.
-# The fix was a singular, accidentally added bracket.
-for match in matches:
-    packageName = match[0]
-    installTime = match[1]
-    lastUpdated = match[2]
-    installerOrigin = match[3]
-    installerOriginOther = match[4]
-    
-    packages.append({
-        'packageName': packageName,
-        'installTime': installTime,
-        'lastUpdated': lastUpdated,
-        'installerOrigin': installerOrigin,
-        'installerOriginOther': installerOriginOther
-    })
+        if len(package) > 0: # are we filling in a package? (it's > 0 if packageName is set)
+            for k, v in regexes.items(): # keys and values from dict
+                match = re.match(v, line)
+                if match:
+                    package[k] = match[1] # key has the same name as in package dictionary
+                    break
+
+    # after the last iteration, include the resulting package if it has data
+    if len(package) > 0:
+        packages.append(package)
+
 
 for package in packages:
-    print(f"Package Name: {package['packageName']}")
-    print(f"Install time: {package['installTime']}")
-    print(f"Last Update Time: {package['lastUpdated']}")
-    print(f"Installer origin: {package['installerOrigin']}")
-    print(f"Other installer origin: {package['installerOriginOther']}")
-    print()
+    print(f"Package: {package['packageName']}")
+    #for k, v in names.items():
+   #     if k in package:
+    #        print(f'{v}: {package[k]}')
+
+   # print()
