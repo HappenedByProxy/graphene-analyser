@@ -1,25 +1,27 @@
 import re
 
 # Input string for testing
-#testString = "  Package [com.android.adservices.api] (a37eabe)"
-# vim: set fdm=marker fmr={{{,}}} fdl=0 :
-# {{{ dummy data
 testString="""
-        NotificationChannel{mId='1468991407889256453-dms', mName=Dir..., mDescription=, mImportance=4, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=content://settings/sys>
-        NotificationChannel{mId='1370568081811079169-live_spaces', mName=Liv..., mDescription=, mImportance=4, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=null, mLights=>
+      AppSettings: com.twitter.android (1110131) importance=DEFAULT userSet=true
         NotificationChannelGroup{mId='123456789', mName=@redacted, mDescription=, mBlocked=false, mChannels=[], mUserLockedFields=0}
         NotificationChannelGroup{mId='987654321', mName=@R3dacted, mDescription=, mBlocked=false, mChannels=[], mUserLockedFields=0}
         NotificationChannelGroup{mId='11223344556677', mName=@otherRedac, mDescription=, mBlocked=false, mChannels=[], mUserLockedFields=0}
       AppSettings: app.grapheneos.camera (1110165) importance=DEFAULT userSet=false
 """
 
+# packageList = list variable to fill with dicts
+# packageDict = dict is a set of keys and values
+# packageName = one of the keys in the dict
+# a dict is a set of keys (values on the left) with values. You can reference a value by its key
+
 # Regex patterns
-twitterNamePattern = r'\s*AppSettings: ([^\]]+)'
+twitterNamePattern = r'\s*AppSettings:\s'
 
 regexes = {
     'twitterID': r"\s*mId='(\d{3,24})'",
+    # Usernames are 4-15 characters.
     # https://help.x.com/en/managing-your-account/x-username-rules
-    'twitterHandle': r'(?<=mName=@)\S{4,15}(?=,)',
+    'twitterHandle': r'mName=@\S{4,15}',
 }
 names = {
     'twitterID': 'Install time',
@@ -27,18 +29,19 @@ names = {
 }
 
 # Process the file
-packageDict = []
+packageList = []
 
 # Simulating file read with testString split into lines
 fileTest = testString.strip().split('\n')
 
-packageList = {}
+packageDict = {}
 for line in fileTest:
     match = re.match(twitterNamePattern, line)
     if match:
         print(f"Processing line: {line.strip()}")  # Debug print
         if len(packageList) > 0:  # Current package has data, but we've run into a new Package [...] line
-            packageDict.append(packageList)  # So add it to the list of packages
+            print(f"Adding to dict...")
+            packageList.append(packageDict)  # So add it to the list of packages
             packageList = {}  # And clear the package, ready for next round
 
         print("Regex match for twitterNamePattern found.")  # Debug print
@@ -55,8 +58,8 @@ for line in fileTest:
                 break
 
 # After the last iteration, include the resulting package if it has data
-if len(packageList) > 0:
-    packageDict.append(packageList)
+if len(PackageDict) > 0:
+    packageList.append(PackageDict)
 
 # Output the packages
 for packageList in packageDict:
