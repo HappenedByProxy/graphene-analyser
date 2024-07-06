@@ -469,3 +469,14 @@ User=14
 
 user=14
 userid=14
+
+### How this script will run:
+#### guided ui
+1. main.py or whatever will be like "do u have ur own files or want us to get them"
+2. if we gotta get them then run the script that does that
+3. when that script is done, ask user what services they want
+4. call each script according to what service they want (e.g servicePackage.py serviceAccounts.py)
+5. Combine the output of these files into 1 file for ez read
+
+#### cli
+oxidize <mode> <service,services>

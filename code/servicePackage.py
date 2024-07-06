@@ -2181,36 +2181,36 @@ names = {
     'installerOriginOther': 'Installer origin (other)'
 }
 
-packageDict = []
+packageList = []
 
-with open('../samples/package.txt.priv', 'r') as file:
+with open('package.txt.priv', 'r') as file:
     fileContent = file.readlines()
-    packageList = {}
+    packageDict = {}
     for line in fileContent:
         match = re.match(packageNamePattern, line)
         if not match == None:
-            if len(packageList) > 0: # current package has data, but we've ran into a new Package [...] line
-                packageDict.append(packageList) # so add it to the list of packages
-                packageList = {} # and clear the package, ready for next round
+            if len(packageDict) > 0: # current package has data, but we've ran into a new Package [...] line
+                packageList.append(packageDict) # so add it to the list of packages
+                packageDict = {} # and clear the package, ready for next round
 
-            packageList['packageName'] = match[1]
+            packageDict['packageName'] = match[1]
             continue
 
-        if len(packageList) > 0: # are we filling in a package? (it's > 0 if packageName is set)
+        if len(packageDict) > 0: # are we filling in a package? (it's > 0 if packageName is set)
             for k, v in regexes.items(): # keys and values from dict
                 match = re.match(v, line)
                 if match:
-                    packageList[k] = match[1] # key has the same name as in package dictionary
+                    packageDict[k] = match[1] # key has the same name as in package dictionary
                     break
 
     # after the last iteration, include the resulting package if it has data
-    if len(packageList) > 0:
-        packageDict.append(packageList)
+    if len(packageDict) > 0:
+        packageList.append(packageDict)
 
 
-for packageList in packageDict:
-    print(f"Package: {packageList['packageName']}")
+for packageDict in packageList:
+    print(f"Package: {packageDict['packageName']}")
     for k, v in names.items():
-       if k in packageList:
-          print(f'{v}: {packageList[k]}')
+       if k in packageDict:
+          print(f'{v}: {packageDict[k]}')
     print()
