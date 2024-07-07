@@ -6,7 +6,7 @@ accountPattern = r'\s*Account \{name=([^,]+), type=([^\}]+)\}'
 
 profileList = []
 
-with open('account.txt.priv', 'r') as file:
+with open('account.oxidize.priv', 'r') as file:
     fileContent = file.readlines()
     profileDict = {}
     for line in fileContent:
