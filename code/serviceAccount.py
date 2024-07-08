@@ -1,7 +1,7 @@
 import re
 
 # Patterns
-userInfoPattern = r'User UserInfo\{(\d+):([^:]+):(\d+)\}'
+userInfoPattern = r'User UserInfo\{(\d+):([^:]+):([^}]+)\}:'
 accountPattern = r'\s*Account \{name=([^,]+), type=([^\}]+)\}'
 
 profileList = []
