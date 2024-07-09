@@ -15,9 +15,9 @@ Then, we parse the information through our software.
 
 ### PREQUISITES
 1. The phone must be unlocked. This is a standard for all forensic tools.
-2. The primary profile must be the unlocked profile. It does not matter if you have no access to other profiles.
+2. The owner profile must be the unlocked profile. It does not matter if you have no access to other profiles.
 3. Developer options must be active, and USB debugging to be enabled.
-4. The commands can be ran in any profile as long as the computer was authorized and the cable does not get disconnected, but this will not change the outcome (I think).
+4. The commands can be ran in any profile as long as the computer was authorized in the owner profile, and the cable does not get disconnected, but this will not change the outcome (I think).
 
 ### WHAT INFO CAN I GET?
 

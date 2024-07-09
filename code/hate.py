@@ -2165,29 +2165,26 @@ testString = """
 """
 # }}}
 
-packageNamePattern = r'\s*Package \[([^\]]+)\] \(\w+\):'
+twitterNamePattern = r'\s*AppSettings:\s'
 
 regexes = {
-    'installTime': r'\s*timeStamp=(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})',
-    'lastUpdated': r'\s*lastUpdateTime=(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})',
-    'installerOrigin': r'\s*originatingPackageName=([^\n]+)',
-    'installerOriginOther': r'\s*installerPackageName=([^\n]+)'
+    'twitterID': r"\s*mId='(\d{3,24})'",
+    # Usernames are 4-15 characters.
+    # https://help.x.com/en/managing-your-account/x-username-rules
+    'twitterHandle': r'mName=@\S{4,15}',
 }
-
 names = {
-    'installTime': 'Install time',
-    'lastUpdated': 'Last updated',
-    'installerOrigin': 'Installer origin',
-    'installerOriginOther': 'Installer origin (other)'
+    'twitterID': 'Install time',
+    'twitterHandle': 'Last updated',
 }
 
 packageList = []
 
-with open('package.oxidize.priv', 'r') as file:
+with open('package.txt.priv', 'r') as file:
     fileContent = file.readlines()
     packageDict = {}
     for line in fileContent:
-        match = re.match(packageNamePattern, line)
+        match = re.match(twitterNamePattern, line)
         if not match == None:
             if len(packageDict) > 0: # current package has data, but we've ran into a new Package [...] line
                 packageList.append(packageDict) # so add it to the list of packages

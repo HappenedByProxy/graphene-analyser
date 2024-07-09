@@ -1,12 +1,12 @@
 import re
 
 # Patterns
-handlePattern = r'mName=@(\S{4,15}),'
-mIdPattern = r"\s*mId='(\d{3,24})'"
+userInfoPattern = r'User UserInfo\{(\d+):([^:]+):(\d+)\}:'
+accountPattern = r'\s*Account \{name=([^,]+), type=([^\}]+)\}'
 
 groupList = []
 
-with open('notification.txt.priv', 'r') as file:
+with open('account.txt.priv', 'r') as file:
     fileContent = file.readlines()
     for line in fileContent:
         id_match = re.search(mIdPattern, line)

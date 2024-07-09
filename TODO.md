@@ -1,6 +1,6 @@
 # TO DO
 More service files
-Create Oxidize.py
+
 
 serviceWifi.py
 
@@ -11,6 +11,8 @@ servicePackage.py
 serviceAccount.py
 - Add Accounts History
 
+oxidize.py
+- Add more uhh uhhhhh things
 
 # NEED TO FIX
 serviceNotifs.py
