@@ -9,10 +9,11 @@ testString="""
       AppSettings: app.grapheneos.camera (1110165) importance=DEFAULT userSet=false
 """
 
-# packageList = list variable to fill with dicts
-# packageDict = dict is a set of keys and values
+# packageList = list variable to fill with dicts. a list is just an array. which is [1, 2, 3]
+# packageDict = dict is a set of keys and values. dicts are like json. {"age": 22}
 # packageName = one of the keys in the dict
 # a dict is a set of keys (values on the left) with values. You can reference a value by its key
+#
 
 # Regex patterns
 twitterNamePattern = r'\s*AppSettings:\s'
@@ -31,40 +32,39 @@ names = {
 # Process the file
 packageList = []
 
-# Simulating file read with testString split into lines
-fileTest = testString.strip().split('\n')
+with open('notification.txt.priv', 'r') as file:
+    fileContent = file.readlines()
+    packageDict = {}
+    for line in fileContent:
+        match = re.match(twitterNamePattern, line)
+        if not match == None:
+            print(f"Processing line: {line.strip()}")  # Debug print
+            if len(packageDict) > 0:  # Current package has data, but we've run into a new Package [...] line
+                print(f"Adding to dict...")
+                packageList.append(packageDict)  # So add it to the list of packages
+                #packageDict = {}  # And clear the package, ready for next round
 
-packageDict = {}
-for line in fileTest:
-    match = re.match(twitterNamePattern, line)
-    if match:
-        print(f"Processing line: {line.strip()}")  # Debug print
-        if len(packageList) > 0:  # Current package has data, but we've run into a new Package [...] line
-            print(f"Adding to dict...")
-            packageList.append(packageDict)  # So add it to the list of packages
-            packageList = {}  # And clear the package, ready for next round
+            print("Regex match for twitterNamePattern found.")  # Debug print
+            package['packageName'] = match[1]
+            continue
 
-        print("Regex match for twitterNamePattern found.")  # Debug print
-        # No capturing group here, so just indicating a match is found
-        continue
-
-    if len(packageList) > 0:  # Are we filling in a package? (It's > 0 if packageName is set)
+    if len(packageDict) > 0:  # Are we filling in a package? (It's > 0 if packageName is set)
         for k, v in regexes.items():  # Keys and values from dict
             match = re.search(v, line)
             if match:
                 print(f"Match found for {k} in line: {line.strip()}")  # Debug print
                 print(f"Captured group: {match.group(1)}")  # Debug print
-                packageList[k] = match.group(1)  # Key has the same name as in package dictionary
+                packageDict[k] = match.group(1)  # Key has the same name as in package dictionary
                 break
 
 # After the last iteration, include the resulting package if it has data
-if len(PackageDict) > 0:
-    packageList.append(PackageDict)
+if len(packageDict) > 0:
+    packageList.append(packageDict)
 
 # Output the packages
-for packageList in packageDict:
-    print(f"Package: {packageList.get('packageName', 'Unknown')}")
+for packageDict in packageList:
+    print(f"Package: {packageDict.get('packageName', 'Unknown')}")
     for k, v in names.items():
-        if k in packageList:
-            print(f'{v}: {packageList[k]}')
+        if k in packageDict:
+            print(f'{v}: {packageDict[k]}')
     print()

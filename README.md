@@ -14,3 +14,7 @@ Confidential data gathered from my personal phone is to never be committed to th
 or
 
 * adb shell dumpsys `<service>`
+
+# REQUIREMENTS
+None! Unless you want some quality of life changes.
+* pypager

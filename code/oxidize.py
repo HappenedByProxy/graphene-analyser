@@ -2,6 +2,13 @@ import sys
 import subprocess
 import serviceAccount
 import importlib
+import shutil
+
+try:
+    import pypager
+    pagerAvailable = True
+except ImportError:
+    pagerAvailable = False
 
 # Three ways to use this program.
 # One is automatic ADB collection, more guided.
@@ -16,7 +23,8 @@ list - List possible services.
 get <service>  - Write service file to disk.
 run <service>  - Run a service parser.
 view <service>  - Fetch & view the service log without parsing or saving. 
-setup - Set up OXIDIZE.""")
+setup - Set up OXIDIZE.
+opt - Optional Python modules that you could use.""")
         sys.exit(1)
 
     # $1
@@ -63,12 +71,62 @@ setup - Set up OXIDIZE.""")
     elif arg1 == "view":
         arg2 = arg2.lower()
         result = subprocess.run(["adb", "shell", "dumpsys", arg2], capture_output=True)
-        output = result 
-        print(output)   
+        output = result.stdout.decode('utf-8')
+        # for later
+        if pagerAvailable == True:
+            #pager.add_source(output)
+            #p.run()
+            print(output)
+        else:
+            print(output)
+    elif arg1 == "opt":
+        print(f"pypager:",pagerAvailable)
+
+    # Time for if statement hell.
+    elif arg1 == "setup":
+        print("Checking if ADB is installed...")
+        # Run "adb" as a command. If its present? Carry on.
+        checkADB = shutil.which("adb")
+        if checkADB:
+            print(f"ADB in path.")
+        # adb isn't in path? Exit, no point in continuing.
+        else:
+            print("ADB is not in the path. ADB is a requirement for this script to work.")
+            print("Not written by me, but will help you on Windows:")
+            print("https://medium.com/@yadav-ajay/a-step-by-step-guide-to-setting-up-adb-path-on-windows-0b833faebf18")
+            sys.exit()
+        
+        # ADB in path? Let's make sure we are authorized.
+        print("Connect the device to the computer with a USB cable.")
+        input("When connected, press any key to continue.")
+
+# Suddenly, ADB is like "well I don't wanna be authorised anymore!!"
+# So instead of saying its authorised when it is authorised, it instead says:
+# List of devices attached
+# 09091JECB09613         device product:bramble model:Pixel_4a__5G_ device:bramble transport_id:1
+# WHY???
+        while True:
+            result = subprocess.run(['adb', 'devices', '-l'], capture_output=True, text=True)
+            output = result.stdout
+    
+            # Not authorized? Look at the phone.
+            if 'unauthorized' in output:
+                print("Allow USB debugging on the phone.")
+                input("Press Enter to try again.")
+                continue  # Retry the loop to check authorization again
+    
+            # Not authorized OR unauthorized? Device probably isn't plugged in.
+            if "authorized" not in output and "unauthorized" not in output:
+                if "model" not in output:
+                    print("No devices found.")
+                    input("Ensure the device is plugged in and press Enter to try again.")
+    
+            # Authorized? Let them know they can use the rest of the script now.
+            elif 'authorized' or 'device' in output:
+                print("Device authorized.")
+                break  # Exit the loop since the device is authorized
 
 
-    print("DEBUG: $1 = ",arg1)
-    print("DEBUG: $2 = ",arg2)
     
 if __name__ == "__main__":
     main()
