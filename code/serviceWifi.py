@@ -17,7 +17,7 @@ names = {
 
 packages = []
 
-with open('wifi.txt.priv', 'r') as file:
+with open('wifi.oxidize', 'r') as file:
     fileContent = file.readlines()
     package = {}
     for line in fileContent:

@@ -34,12 +34,15 @@ opt - Optional Python modules that you could use.""")
     # We use camelCase. Capitalise the start of whatever arg2 is given.
     arg2 = arg2.capitalize() if len(sys.argv) > 2 else None
 
+    # $3
+    arg3 = sys.argv[3] if len(sys.argv) > 3 else None
+
     # Run "adb" as a command. If its present? Carry on.
     checkADB = shutil.which("adb")
     if checkADB:
-        continue
-     # adb isn't in path? Exit, no point in continuing.
+        adbStatus = True
     else:
+     # adb isn't in path? Exit, no point in continuing.
         print("ADB is not in the path. ADB is a requirement for this script to work.")
         print("Not written by me, but will help you on Windows:")
         print("https://medium.com/@yadav-ajay/a-step-by-step-guide-to-setting-up-adb-path-on-windows-0b833faebf18")

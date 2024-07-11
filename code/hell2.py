@@ -6,11 +6,11 @@ accountPattern = r'\s*Account \{name=([^,]+), type=([^\}]+)\}'
 
 groupList = []
 
-with open('account.txt.priv', 'r') as file:
+with open('account.oxidize', 'r') as file:
     fileContent = file.readlines()
     for line in fileContent:
-        id_match = re.search(mIdPattern, line)
-        name_match = re.search(handlePattern, line)
+        id_match = re.search(userInfoPattern, line)
+        name_match = re.search(accountPattern, line)
         if id_match and name_match:
             groupDict = {
                 'mId': id_match[1],

@@ -1,23 +1,25 @@
 # TO DO
 More service files
-
-
 serviceWifi.py
+- SSID and maybe BSSID
+
+serviceVpn.py
+- vpn_management
 
 # W.I.P
-servicePackage.py
-- Generally make it more usable
-
 serviceAccount.py
 - Add Accounts History
 
-oxidize.py
-- Add more uhh uhhhhh things
+serviceUser.py
+- Make it look better
 
 # NEED TO FIX
 serviceNotifs.py
 
+
 # DONE
+servicPackage.py
+oxidize.py
 
 # NOT PRIORITY
 GUI (never happening)

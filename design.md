@@ -280,12 +280,13 @@ settings = Info about all settings on the device.
 wifi = Wifi network history.
   WifiConfigManager - Configured networks Begin
 wifiscanner = Outputs the current nearby networks, but also stores a history.
+  do not use
 vpn_management = VPNs that have been used. Example, net.mullvad.mullvadvpn.
 storaged = List of installed applications? Might shown per-profile too?
 power = Whats waking up the phone?
 package = Every single package installed.
 usagestats = Every single app you've ever installed, and app usage stats! GREAT!!
-  Token 85: [com.android.permissioncontroller
+  actually, this only works on 4A 5G? and not the 4A...
   
 content = Shows accounts in a weird way.
 notification = Notifications, for some reason also shows all added Twitter accounts...
