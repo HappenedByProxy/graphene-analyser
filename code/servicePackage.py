@@ -2175,10 +2175,10 @@ regexes = {
 }
 
 names = {
-    'installTime': 'Install time',
-    'lastUpdated': 'Last updated',
-    'installerOrigin': 'Installer origin',
-    'installerOriginOther': 'Installer origin (other)'
+    'installTime': '- Install time',
+    'lastUpdated': '- Last updated',
+    'installerOrigin': '- Installer origin',
+    'installerOriginOther': '- Installer origin (other)'
 }
 
 packageList = []
@@ -2209,7 +2209,7 @@ with open('package.oxidize.priv', 'r') as file:
 
 
 for packageDict in packageList:
-    print(f"Package: {packageDict['packageName']}")
+    print(f"{packageDict['packageName']}")
     for k, v in names.items():
        if k in packageDict:
           print(f'{v}: {packageDict[k]}')
