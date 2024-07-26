@@ -17,7 +17,8 @@ except ImportError:
 
 def main():
     
-    if len(sys.argv) < 2:
+    # There's a few ways users may try to get the help menu to appear. 
+    if len(sys.argv) < 2 or sys.argv[1] == "-h" or sys.argv[1] == "help" or sys.argv[1] == "--help":
         print("""OXIDIZE V1.0
 list - List possible services.
 get <service>  - Write service file to disk.
@@ -51,9 +52,6 @@ opt - Optional Python modules that you could use.""")
     # Gets the service file.
     if arg1 == "get":
 
-        # To prevent YandereDev-type code, lets dynamically change the name of the module we use.
-        #module_name = f"service{arg2}"
-        #module = importlib.import_module(module_name)
         # It's really dumb, but we need to actually lowercase this or it won't work.
         arg2 = arg2.lower()
 
@@ -74,10 +72,15 @@ opt - Optional Python modules that you could use.""")
         print(output)
 
     elif arg1 == "run":
+        # To prevent YandereDev-type code, lets dynamically change the name of the module we use.
         # Run the right script.
         module_name = f"service{arg2}"
         module = importlib.import_module(module_name)
         module.main()
+
+        # Whatever arg2 is given will attempt to be imported as a module. Obviously this is bad because if the module doesnt exist then the script stops working.
+        # Solution? Place all service scripts into service/. Uhh, then get a list of available scripts and check if the given arg2 matches.
+        # Alternatively we could be really lazy and just manually add the scripts to the check, but come on, now.
 
     elif arg1 == "view":
         arg2 = arg2.lower()
@@ -92,6 +95,7 @@ opt - Optional Python modules that you could use.""")
             print(output)
     elif arg1 == "opt":
         print(f"pypager:",pagerAvailable)
-    
+    else:
+        print("Invalid argument.")
 if __name__ == "__main__":
     main()
