@@ -1,8 +1,11 @@
 import sys
 import subprocess
-import serviceAccount
 import importlib
 import shutil
+import os
+
+sys.path.append("services") # Adds the "services" folder to path.
+import services # Imports the service folder.
 
 try:
     import pypager
@@ -74,13 +77,16 @@ opt - Optional Python modules that you could use.""")
     elif arg1 == "run":
         # To prevent YandereDev-type code, lets dynamically change the name of the module we use.
         # Run the right script.
-        module_name = f"service{arg2}"
-        module = importlib.import_module(module_name)
-        module.main()
-
-        # Whatever arg2 is given will attempt to be imported as a module. Obviously this is bad because if the module doesnt exist then the script stops working.
-        # Solution? Place all service scripts into service/. Uhh, then get a list of available scripts and check if the given arg2 matches.
-        # Alternatively we could be really lazy and just manually add the scripts to the check, but come on, now.
+        try:
+            moduleName = f"service{arg2}"
+            module = importlib.import_module(moduleName)
+            module.main()
+        except ModuleNotFoundError:
+            print("Can't find script! Check your spelling or if it even exists.")
+        except AttributeError:
+            print("Script is missing main func! It probably ran anyway.")
+        except Exception as e:
+            print("Unknown exception!")
 
     elif arg1 == "view":
         arg2 = arg2.lower()
