@@ -3,6 +3,7 @@ import subprocess
 import importlib
 import shutil
 import os
+import traceback # remove later
 
 sys.path.append("services") # Adds the "services" folder to path.
 import services # Imports the service folder.
@@ -58,15 +59,23 @@ opt - Optional Python modules that you could use.""")
         # It's really dumb, but we need to actually lowercase this or it won't work.
         arg2 = arg2.lower()
 
-        # Get the diagnostic log for the service specified. Techncially, yes, if you mispell a service, you get nothing
-        # There is probably a way to prevent this.
-        result = subprocess.run(["adb", "shell", "dumpsys", arg2], capture_output=True)
-        output = result.stdout
+        # First, we get the list of processes.
+        result = subprocess.run(["adb", "shell", "dumpsys", "-l"], capture_output=True)
+        output = result.stdout.decode('utf-8')  # Decode the byte output to a string. This makes newliens (\n) actually work as intended.
         
-        output_file = f"{arg2}.oxidize"
-        with open(output_file, "wb") as f:
-            f.write(output)
-        print("Written to",output_file)
+        index = output.find(arg2) # Look for arg2 in output.
+        if index != -1: # If its there, then do the stuff. Write output to file.
+            try:
+                output_file = f"{arg2}.oxidize"
+                with open(output_file, "wb") as f:
+                    output = output.encode('utf-8')  # I will be honest, I don't know why I suddenly have to re-encode back to bytes. 
+                    f.write(output)
+                print("Written to",output_file)
+            except Exception as e:
+                print("Unexpected exception!")
+                print(traceback.format_exc())
+        else:
+            print("Can't find service!")
 
     elif arg1 == "list":
         # Run dumpsys -l, aka "show us packages".
@@ -86,7 +95,8 @@ opt - Optional Python modules that you could use.""")
         except AttributeError:
             print("Script is missing main func! It probably ran anyway.")
         except Exception as e:
-            print("Unknown exception!")
+            print("Unexpected exception!")
+            print(traceback.format_exc())
 
     elif arg1 == "view":
         arg2 = arg2.lower()
