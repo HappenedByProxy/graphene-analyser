@@ -3,7 +3,7 @@ import subprocess
 import importlib
 import shutil
 import os
-import traceback # remove later
+import traceback
 
 sys.path.append("services") # Adds the "services" folder to path.
 import services # Imports the service folder.
@@ -27,8 +27,7 @@ def main():
 list - List possible services.
 get <service>  - Write service file to disk.
 run <service>  - Run a service parser.
-view <service>  - Fetch & view the service log without parsing or saving.
-opt - Optional Python modules that you could use.""")
+view <service>  - Fetch & view the service log without parsing or saving.""")
         sys.exit(1)
 
     # $1
@@ -38,9 +37,6 @@ opt - Optional Python modules that you could use.""")
     arg2 = sys.argv[2] if len(sys.argv) > 2 else None
     # We use camelCase. Capitalise the start of whatever arg2 is given.
     arg2 = arg2.capitalize() if len(sys.argv) > 2 else None
-
-    # $3
-    arg3 = sys.argv[3] if len(sys.argv) > 3 else None
 
     # Run "adb" as a command. If its present? Carry on.
     checkADB = shutil.which("adb")
@@ -104,16 +100,21 @@ opt - Optional Python modules that you could use.""")
             print(traceback.format_exc())
 
     elif arg1 == "view":
+
         arg2 = arg2.lower()
-        result = subprocess.run(["adb", "shell", "dumpsys", arg2], capture_output=True)
+        result = subprocess.run(["adb", "shell", "dumpsys", "-l"], capture_output=True)
         output = result.stdout.decode('utf-8')
-        # for later
-        if pagerAvailable == True:
-            #pager.add_source(output)
-            #p.run()
-            print(output)
-        else:
-            print(output)
+        
+        index = output.find(arg2) # Look for arg2 in output.
+        if index != -1: # If its there, then do the stuff.
+            try:
+                print(output)
+            except Exception as e:
+                print("Unexpected exception!")
+                print(traceback.format_exc())
+        else:   
+            print("Can't find service OR device not connected!")
+
     elif arg1 == "opt":
         print(f"pypager:",pagerAvailable)
     else:
