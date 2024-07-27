@@ -56,6 +56,11 @@ opt - Optional Python modules that you could use.""")
     # Gets the service file.
     if arg1 == "get":
 
+        # If user forgot to give a second arg, remind them.
+        if not arg2: 
+            print("get <service>")
+            sys.exit()
+
         # It's really dumb, but we need to actually lowercase this or it won't work.
         arg2 = arg2.lower()
 
@@ -75,7 +80,7 @@ opt - Optional Python modules that you could use.""")
                 print("Unexpected exception!")
                 print(traceback.format_exc())
         else:
-            print("Can't find service!")
+            print("Can't find service OR device not connected!")
 
     elif arg1 == "list":
         # Run dumpsys -l, aka "show us packages".
