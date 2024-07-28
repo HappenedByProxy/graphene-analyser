@@ -105,7 +105,7 @@ view <service>  - Fetch & view the service log without parsing or saving.""")
     elif arg1 == "view":
 
         arg2 = arg2.lower()
-        result = subprocess.run(["adb", "shell", "dumpsys", "-l"], capture_output=True)
+        result = subprocess.run(["adb", "shell", "dumpsys", arg2], capture_output=True)
         output = result.stdout.decode('utf-8')
         
         index = output.find(arg2) # Look for arg2 in output.
