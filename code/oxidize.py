@@ -4,6 +4,9 @@ import importlib
 import shutil
 import os
 import traceback
+import platform
+osDetect = platform.system()
+import pydoc 
 
 sys.path.append("services") # Adds the "services" folder to path.
 import services # Imports the service folder.
@@ -20,7 +23,7 @@ except ImportError:
 # Third is you throw a whole bugreport in there.
 
 def main():
-    
+
     # There's a few ways users may try to get the help menu to appear. 
     if len(sys.argv) < 2 or sys.argv[1] == "-h" or sys.argv[1] == "help" or sys.argv[1] == "--help":
         print("""OXIDIZE V1.0
@@ -106,12 +109,15 @@ view <service>  - Fetch & view the service log without parsing or saving.""")
         output = result.stdout.decode('utf-8')
         
         index = output.find(arg2) # Look for arg2 in output.
-        if index != -1: # If its there, then do the stuff.
-            try:
-                print(output)
-            except Exception as e:
-                print("Unexpected exception!")
-                print(traceback.format_exc())
+        if index != -1: # If its there, then do the stuffs  
+            if osDetect == "Linux": # Are we running Linux? If so, pipe it into "less" instead.
+                try:
+                    subprocess.run(['less'], input=output, text=True)
+                except Exception as e:
+                    print("Unexpected exception!")
+                    print(traceback.format_exc())
+            else: # If we aren't on Linux, then use pydoc. Which is basically "more".
+                pydoc.pager(output)
         else:   
             print("Can't find service OR device not connected!")
 
