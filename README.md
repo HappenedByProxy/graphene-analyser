@@ -1,4 +1,4 @@
-# Oxidize
+# Oxidize 1.0 - August 2nd
 A tool for analysing GrapheneOS ADB logs.
 
 # Install
