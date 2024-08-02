@@ -5,3 +5,4 @@
 *.swp
 *.oxidize
 code/venvtest
+code/__pycache__
