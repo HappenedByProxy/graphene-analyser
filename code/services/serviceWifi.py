@@ -27,7 +27,12 @@ with open('wifi.oxidize', 'r') as file:
                 packages.append(package) # so add it to the list of packages
                 package = {} # and clear the package, ready for next round
 
+<<<<<<< Updated upstream
             package['packageName'] = match[1]
+=======
+            package['SSID'] = match[1]
+            package['BSSID'] = match[2]
+>>>>>>> Stashed changes
             continue
 
         if len(package) > 0: # are we filling in a package? (it's > 0 if packageName is set)
