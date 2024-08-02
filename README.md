@@ -27,11 +27,11 @@ ADB must be on path.
 - package
 - user
 
-## WHAT INFO CAN I GET?
+## What info can I get?
 1. List of all installed applications.
 2. Accounts connected to apps. Known examples include Twitter, Gmail, Reddit, OneDrive, Pixiv, YouTube.
 
-## WHAT INFO CAN I NOT GET?
+## What info can I NOT get?
 1. Media. We are analysing logfiles, we do not extract any media from the device.
 2. Browser history.
 3. SMS.
