@@ -4,6 +4,8 @@ import importlib
 import shutil
 import os
 import traceback
+import io
+import contextlib
 import platform
 osDetect = platform.system()
 import pydoc 
@@ -64,7 +66,7 @@ view <service>  - Fetch & view the service log without parsing or saving.""")
         arg2 = arg2.lower()
 
         # First, we get the list of processes.
-        result = subprocess.run(["adb", "shell", "dumpsys", "-l"], capture_output=True)
+        result = subprocess.run(["adb", "shell", "dumpsys", arg2], capture_output=True)
         output = result.stdout.decode('utf-8')  # Decode the byte output to a string. This makes newliens (\n) actually work as intended.
         
         index = output.find(arg2) # Look for arg2 in output.
@@ -88,12 +90,32 @@ view <service>  - Fetch & view the service log without parsing or saving.""")
         print(output)
 
     elif arg1 == "run":
+
+        if not arg2: 
+            print("run <service>")
+            sys.exit()
         # To prevent YandereDev-type code, lets dynamically change the name of the module we use.
         # Run the right script.
         try:
             moduleName = f"service{arg2}"
             module = importlib.import_module(moduleName)
-            module.main()
+            
+            # String buffer to capture stdout.
+            buffer = io.StringIO()
+
+            # Direct stdout to buffer.
+            with contextlib.redirect_stdout(buffer):
+                module.main()
+
+            # Actually getting the results from the buffer
+            bufferOutput = buffer.getvalue()
+
+            # Print the captured output to the terminal.
+            print(bufferOutput)
+        
+            # Write the captured output to a file
+            with open(f"parsed{arg2}.oxidize", "w") as file:
+                file.write(bufferOutput)
         except ModuleNotFoundError:
             print("Can't find script! Check your spelling or if it even exists.")
         except AttributeError:
@@ -103,6 +125,10 @@ view <service>  - Fetch & view the service log without parsing or saving.""")
             print(traceback.format_exc())
 
     elif arg1 == "view":
+
+        if not arg2: 
+            print("view <service>")
+            sys.exit()
 
         arg2 = arg2.lower()
         result = subprocess.run(["adb", "shell", "dumpsys", arg2], capture_output=True)
