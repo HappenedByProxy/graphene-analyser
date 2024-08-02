@@ -30,7 +30,6 @@ ADB must be on path.
 ## WHAT INFO CAN I GET?
 1. List of all installed applications.
 2. Accounts connected to apps. Known examples include Twitter, Gmail, Reddit, OneDrive, Pixiv, YouTube.
-3. 
 
 ## WHAT INFO CAN I NOT GET?
 1. Media. We are analysing logfiles, we do not extract any media from the device.
@@ -46,6 +45,3 @@ ADB must be on path.
 ## Using ADB on WSL1
 * Windows: adb tcpip 5555
 * WSL: adb connect <phone ip>:5555
-
-## Other useful things
-* I suggest piping "view <service>" into a pager. On Linux, this is done with `| less` or your preferred pager. On Windows, you can do `| more`.
