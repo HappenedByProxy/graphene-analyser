@@ -116,6 +116,7 @@ view <service>  - Fetch & view the service log without parsing or saving.""")
             # Write the captured output to a file
             with open(f"parsed{arg2}.oxidize", "w") as file:
                 file.write(bufferOutput)
+            print(f"Written to parsed{arg2}.oxidize.")
         except ModuleNotFoundError:
             print("Can't find script! Check your spelling or if it even exists.")
         except AttributeError:

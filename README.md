@@ -9,11 +9,23 @@ A tool for analysing GrapheneOS ADB logs.
 # Requirements
 ADB must be on path.
 
-## PREQUISITES
+## Prerequisites
 1. The phone must be unlocked. This is a standard for all forensic tools.
 2. The owner profile must be the unlocked profile. It does not matter if you have no access to other profiles.
 3. Developer options must be active, and USB debugging to be enabled. 
 4. The commands can be ran in any profile as long as the computer was authorized in the owner profile and the cable does not get disconnected.
+
+# Setup
+1. Unlock the device and connect it to the computer with USB.
+2. Open a cmd prompt and enter `adb devices -l`.
+3. Look at the phone and authorize the computer.
+4. Check `adb devices -l` again. If the device is shown as anything but "unauthorized", it's probably ready.
+
+# Current available parsers:
+- account
+- notification
+- package
+- user
 
 ## WHAT INFO CAN I GET?
 1. List of all installed applications.
