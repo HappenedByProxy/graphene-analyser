@@ -6,7 +6,7 @@ mIdPattern = r"\s*mId='(\d{3,24})'"
 
 groupList = []
 
-with open('notification.oxidize.priv', 'r') as file:
+with open('notification.oxidize', 'r') as file:
     fileContent = file.readlines()
     for line in fileContent:
         id_match = re.search(mIdPattern, line)
