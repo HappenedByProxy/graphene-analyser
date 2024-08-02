@@ -1,3 +1,5 @@
+# This document was/is used to develop Oxidize. You do not need to read this unless you are looking to contribute.
+
 We collect data from ADB.
 This data is stored in a zip. The only thing we need is the log that'll be like 60MB.
 But there's a way to split this data into individual files, possibly? Not sure how to do that, if I gotta do it myself or maybe adb can do it...
